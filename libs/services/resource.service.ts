@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { AuditModel } from 'tools/model/audit.model';
 import { Model } from 'mongoose';
+import { AuditModel } from 'tools/model/audit.model';
 
 @Injectable()
 export class ResourceService<T extends any, C extends any, U extends any> {
@@ -13,24 +13,27 @@ export class ResourceService<T extends any, C extends any, U extends any> {
     return await this.mongoModel.findById(id).exec();
   }
 
-  async createUser(model: any): Promise<T> {
+  async createUser(model: C): Promise<T> {
     const audit = new AuditModel();
     audit.active = true;
     audit.createdBy = 'Ufuk';
     audit.createdAt = new Date();
 
-    const createdModel = new this.mongoModel({ ...model, ...audit });
+    const createdModel = new this.mongoModel({
+      ...(model as Object),
+      ...audit,
+    });
 
     return await createdModel.save();
   }
 
-  async update(id: string, dto: any): Promise<any> {
-    let newModel = this.mongoModel.findOne({ _id: id }).exec();
-    newModel = { ...newModel, ...dto };
+  async update(id: string, dto: U): Promise<T> {
+    let newModel = await this.mongoModel.findById(id).exec();
+    newModel = { ...newModel, ...(dto as Object) };
 
-    return await this.mongoModel
-      .findByIdAndUpdate(id, newModel, { new: true })
-      .exec();
+    return await this.mongoModel.findByIdAndUpdate(id, newModel as any, {
+      new: true,
+    });
   }
 
   async delete(id: string): Promise<T> {
