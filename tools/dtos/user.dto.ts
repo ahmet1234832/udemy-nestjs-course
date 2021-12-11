@@ -3,10 +3,16 @@ export class UserCreateDto {
   surname: string;
   password: string;
   email: string;
-  birthdate: Date;
 }
 
 export class UserLoginDto {
   email: string;
   password: string;
+}
+
+export class UserUpdateDto {
+  name: string;
+  surname: string;
+  password: string;
+  email: string;
 }

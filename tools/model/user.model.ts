@@ -1,4 +1,5 @@
 import { AuditModel } from './audit.model';
+import * as mongoose from 'mongoose';
 
 export class UserModel {
   id: string;
@@ -10,3 +11,12 @@ export class UserModel {
   passwordHash: string;
   audit: AuditModel;
 }
+
+export const UserSchema = new mongoose.Schema({
+  name: String,
+  surname: String,
+  email: String,
+  audit: Object,
+  roles: Array,
+  groups: Array,
+});
