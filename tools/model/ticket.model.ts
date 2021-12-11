@@ -2,6 +2,7 @@ import { ActivityModel } from './activity.mode';
 import { InventoryModel } from './inventory.model';
 import { TicketTypeModel } from './ticket-type.model';
 import { UserModel } from './user.model';
+import * as mongoose from 'mongoose';
 
 export class TicketModel {
   id: string;
@@ -12,3 +13,23 @@ export class TicketModel {
   activities: ActivityModel[];
   inventories: InventoryModel[];
 }
+
+export const TicketSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    unique: [true, 'Ticket Name must be unique'],
+    required: [true, 'Ticket Name is required'],
+  },
+  description: {
+    type: String,
+    required: [true, 'Ticket description is required'],
+  },
+  audit: { type: Object },
+  type: { type: Object, required: [true, 'Ticket Type is required'] },
+  responsible: {
+    type: Object,
+    required: [true, 'Ticket responsible user is required'],
+  },
+  activities: { type: Array },
+  inventories: { type: Array },
+});
