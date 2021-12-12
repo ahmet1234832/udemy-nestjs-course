@@ -13,6 +13,7 @@ import { ProductTypeModule } from './product/product-type/product-type.module';
 import { ActivityTypeModule } from './activity/activity-type/activity-type.module';
 import { InventoryTypeModule } from './inventory/inventory-type/inventory-type.module';
 import { TicketTypeModule } from './ticket/ticket-type/ticket-type.module';
+import { TotalModule } from './total/total.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TicketTypeModule } from './ticket/ticket-type/ticket-type.module';
     InventoryTypeModule,
     ProductTypeModule,
     TicketTypeModule,
+    TotalModule,
   ],
   controllers: [AppController],
   providers: [AppService],
