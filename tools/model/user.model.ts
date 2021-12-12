@@ -16,10 +16,14 @@ export class UserModel {
 }
 
 export const UserSchema = new mongoose.Schema({
-  name: String,
-  surname: String,
-  image: String,
-  email: String,
+  name: { type: String, required: [true, 'user name is required'] },
+  surname: { type: String, required: [true, 'user name is required'] },
+  image: { type: String, unique: [true, 'image must be unique'] },
+  email: {
+    type: String,
+    unique: [true, 'email must be unique'],
+    required: [true, 'email must be unique'],
+  },
   audit: Object,
   roles: Array,
   groups: Array,

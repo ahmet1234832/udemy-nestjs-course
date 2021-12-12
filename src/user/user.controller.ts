@@ -6,8 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { UserCreateDto, UserUpdateDto } from 'tools/dtos/user.dto';
+import { filterModel } from 'tools/model/filter.model';
 import { UserModel } from 'tools/model/user.model';
 import { UserService } from './user.service';
 
@@ -16,8 +18,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getAllUsers() {
-    return await this.userService.findAll();
+  async getAllUsers(@Query() query: filterModel) {
+    return await this.userService.findAll(query);
   }
 
   @Get(':id')
