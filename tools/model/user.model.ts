@@ -24,6 +24,7 @@ export const UserSchema = new mongoose.Schema({
     unique: [true, 'email must be unique'],
     required: [true, 'email must be unique'],
   },
+  password: { type: String, required: [true, 'User must have a password'] },
   audit: Object,
   roles: Array,
   groups: Array,

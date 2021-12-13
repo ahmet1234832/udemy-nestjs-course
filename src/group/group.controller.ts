@@ -27,11 +27,11 @@ export class GroupController {
   async createGroup(@Body() body: GroupCreateDto): Promise<GroupModel> {
     return this.groupService.createUser(body);
   }
-  @Put('id')
+  @Put(':id')
   async updateGroup(@Param('id') id: string, @Body() body: GroupCreateDto) {
     return this.groupService.update(id, body);
   }
-  @Delete('id')
+  @Delete(':id')
   async removeGroup(@Param('id') id: string) {
     return this.groupService.delete(id);
   }

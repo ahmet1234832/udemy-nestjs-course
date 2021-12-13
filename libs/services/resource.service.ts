@@ -16,36 +16,37 @@ export class ResourceService<T extends any, C extends any, U extends any> {
     searchBy: 'name',
   };
   async findAll(query?: filterModel): Promise<any[]> {
-    if (Object.keys(query).length !== 0) {
-      const searchValue = await { ...this.generalSearchQuery, ...query };
-      const userRegex = new RegExp(searchValue.queryText, 'i');
+    return await this.mongoModel.find();
+    // if (Object.keys(query).length !== 0) {
+    //   const searchValue = await { ...this.generalSearchQuery, ...query };
+    //   const userRegex = new RegExp(searchValue.queryText, 'i');
 
-      return await this.mongoModel
-        .find()
-        .limit(Math.max(0, searchValue.size))
-        .skip(searchValue.size * (searchValue.page - 1))
-        .sort([[`${searchValue.sortBy}`, searchValue.sort]])
-        .exec();
-    } else {
-      const count = await this.mongoModel.countDocuments({}).exec();
-      const data = await this.mongoModel
-        .find()
-        .limit(Math.max(0, this.generalSearchQuery.size))
-        .skip(this.generalSearchQuery.size * (this.generalSearchQuery.page - 1))
-        .exec();
-      return await [
-        {
-          success: true,
-          size: this.generalSearchQuery.size,
-          total: count,
-          data: data,
-        },
-      ];
-    }
+    //   return await this.mongoModel
+    //     .find()
+    //     .limit(Math.max(0, searchValue.size))
+    //     .skip(searchValue.size * (searchValue.page - 1))
+    //     .sort([[`${searchValue.sortBy}`, searchValue.sort]])
+    //     .exec();
+    // } else {
+    //   const count = await this.mongoModel.countDocuments({}).exec();
+    //   const data = await this.mongoModel
+    //     .find()
+    //     .limit(Math.max(0, this.generalSearchQuery.size))
+    //     .skip(this.generalSearchQuery.size * (this.generalSearchQuery.page - 1))
+    //     .exec();
+    //   return await [
+    //     {
+    //       success: true,
+    //       size: this.generalSearchQuery.size,
+    //       total: count,
+    //       data: data,
+    //     },
+    //   ];
+    // }
   }
 
   async findOne(id: string): Promise<T> {
-    return await this.mongoModel.findById(id).exec();
+    return await this.mongoModel.findOne({ _id: id as any }).exec();
   }
 
   async createUser(model: C): Promise<T> {
