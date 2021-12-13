@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -14,6 +19,10 @@ import { ActivityTypeModule } from './activity/activity-type/activity-type.modul
 import { InventoryTypeModule } from './inventory/inventory-type/inventory-type.module';
 import { TicketTypeModule } from './ticket/ticket-type/ticket-type.module';
 import { TotalModule } from './total/total.module';
+import { LoginModule } from './login/login.module';
+import { TokenMiddleware } from 'libs/middleware/token.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from 'libs/guard/auth.guard';
 
 @Module({
   imports: [
@@ -31,8 +40,22 @@ import { TotalModule } from './total/total.module';
     ProductTypeModule,
     TicketTypeModule,
     TotalModule,
+    LoginModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(TokenMiddleware)
+      .exclude('/api/login')
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

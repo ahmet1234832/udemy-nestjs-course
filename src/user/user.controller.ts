@@ -6,8 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
+import { Roles } from 'libs/decorator/role.decorator';
 import { UserCreateDto, UserUpdateDto } from 'tools/dtos/user.dto';
 import { filterModel } from 'tools/model/filter.model';
 import { UserModel } from 'tools/model/user.model';
@@ -23,16 +25,20 @@ export class UserController {
   }
 
   @Get(':id')
+  @Roles('Developer')
   async getUser(@Param('id') id: string) {
     return await this.userService.findOne(id);
   }
 
   @Post()
+  @Roles('Admin')
   async createUser(@Body() body: UserCreateDto): Promise<UserCreateDto> {
+    body.password = await this.userService.convertToHash(body.password);
     return await this.userService.createUser(body);
   }
 
-  @Patch(':id')
+  @Roles('Operator')
+  @Put(':id')
   async updateUser(
     @Param('id') id: string,
     @Body() userUpdateDto: UserUpdateDto,
